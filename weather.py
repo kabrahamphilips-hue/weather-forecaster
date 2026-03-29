@@ -16,3 +16,8 @@ temp = data["main"]["temp"]
 
 with open("README.md", "w") as f:
     f.write(f"# Weather Update\n\n{city}: {temp}°C\n")
+    if "main" in data:
+    temp = data["main"]["temp"]
+else:
+    print("API Error:", data)
+    exit(1)
