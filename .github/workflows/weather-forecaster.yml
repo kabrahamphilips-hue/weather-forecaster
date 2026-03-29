@@ -1,28 +1,48 @@
 name: Update Weather
 
+# Run every day at 8:00 AM local time (UTC+4 for Toronto example adjust UTC as needed)
 on:
   schedule:
-    - cron: "0 8 * * *"   # runs every day at 8:00 AM UTC
-  workflow_dispatch:       # optional: allows manual run
+    - cron: "0 12 * * *"   # 12:00 UTC ≈ 8:00 AM EST
+  workflow_dispatch:       # optional manual trigger
 
 jobs:
   update-weather:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout the repository
       - name: Checkout repo
         uses: actions/checkout@v3
 
+      # 2️⃣ Install Python dependencies
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      # 3️⃣ Run the weather script safely
       - name: Run weather script
         env:
           API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
         run: |
           python weather.py
 
-      - name: Commit changes
+      # 4️⃣ Commit and push changes safely
+      - name: Commit and push changes
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "actions@github.com"
+          
           git add README.md
-          git commit -m "Update weather"
-          git push
+          git commit -m "Update weather" || echo "No changes to commit"
+
+          # Pull latest remote changes to avoid conflicts
+          git fetch origin main
+          git rebase origin/main || echo "No rebase needed"
+
+          # Push changes back to GitHub
+          git push origin main
