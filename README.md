@@ -1,3 +1,3 @@
 # Weather Update
 
-Toronto: 2.02°C
+Toronto: 1.59°C
