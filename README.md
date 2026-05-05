@@ -1,3 +1,3 @@
 # Weather Update
 
-Toronto: 16.65°C
+Toronto: 15.22°C
