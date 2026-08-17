@@ -1,3 +1,3 @@
 # Weather Update
 
-Toronto: 26.04°C
+Toronto: 26.12°C
